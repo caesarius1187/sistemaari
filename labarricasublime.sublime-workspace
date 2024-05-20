@@ -1,0 +1,1158 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"fec",
+				"fecha"
+			],
+			[
+				"fecha",
+				"fechahasta"
+			],
+			[
+				"cant",
+				"cantDetalles"
+			],
+			[
+				"gananciap",
+				"gananciapromedio"
+			],
+			[
+				"costop",
+				"costopromedio"
+			],
+			[
+				"preciop",
+				"preciopromedio"
+			],
+			[
+				"cost",
+				"costopromedio"
+			],
+			[
+				"pad",
+				"padding\tproperty"
+			],
+			[
+				"Promotion",
+				"Promotions"
+			],
+			[
+				"tod",
+				"toFixed"
+			],
+			[
+				"on",
+				"onchange"
+			],
+			[
+				"c",
+				"costo"
+			],
+			[
+				"ganan",
+				"ganancia1"
+			],
+			[
+				"k",
+				"kmpr"
+			],
+			[
+				"promo",
+				"promocion"
+			],
+			[
+				"ga",
+				"ganancia"
+			],
+			[
+				"pr",
+				"productos"
+			],
+			[
+				"pro",
+				"promocion"
+			],
+			[
+				"calcularPro",
+				"calcularPromocion"
+			],
+			[
+				"preciomayo",
+				"preciomayor1"
+			],
+			[
+				"margin-",
+				"margin-bottom\tproperty"
+			],
+			[
+				"fechac",
+				"fechaComprasHasta"
+			],
+			[
+				"fechaVentas",
+				"fechaVentasHasta"
+			],
+			[
+				"s",
+				"style\tAttr"
+			],
+			[
+				"tdborder",
+				"tdborderleftrightbottom"
+			],
+			[
+				"tdborderl",
+				"tdborderleftrightbottom"
+			],
+			[
+				"gananciapa",
+				"gananciapack"
+			],
+			[
+				"product",
+				"producto"
+			],
+			[
+				"totalC",
+				"totalCobros"
+			],
+			[
+				"st",
+				"style"
+			],
+			[
+				"productos",
+				"Productos"
+			],
+			[
+				"w",
+				"width\tproperty"
+			],
+			[
+				"SEA",
+				"searchProductos"
+			],
+			[
+				"la",
+				"label"
+			],
+			[
+				"sub",
+				"submit"
+			],
+			[
+				"cajas",
+				"cajasabiertas"
+			],
+			[
+				"ca",
+				"cajas"
+			],
+			[
+				"totalc",
+				"totalCierre"
+			],
+			[
+				"importe",
+				"importecierre"
+			],
+			[
+				"th",
+				"thead\tTag"
+			],
+			[
+				"puntode",
+				"puntodeventa_id"
+			],
+			[
+				"fo",
+				"for\tfor …"
+			],
+			[
+				"fu",
+				"function"
+			],
+			[
+				"Detalle",
+				"detalleventas"
+			],
+			[
+				"for",
+				"foreach\tforeach …"
+			],
+			[
+				"Detall",
+				"Detalleventas"
+			],
+			[
+				"json",
+				"json_encode"
+			],
+			[
+				"print",
+				"print_r"
+			],
+			[
+				"onk",
+				"onkeyup\tAttr"
+			],
+			[
+				"id",
+				"idtmdb"
+			],
+			[
+				"t",
+				"this"
+			],
+			[
+				"str_r",
+				"str_replace"
+			],
+			[
+				"api",
+				"api_key"
+			],
+			[
+				"magi",
+				"margin-left\tproperty"
+			],
+			[
+				"in",
+				"inline\tdisplay"
+			],
+			[
+				"back",
+				"background-color\tproperty"
+			],
+			[
+				"min",
+				"min-width\tproperty"
+			],
+			[
+				"fl",
+				"float\tproperty"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/Template/Productos/resumen.ctp",
+			"settings":
+			{
+				"buffer_size": 11186,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Template/Rubros/resumen.ctp",
+			"settings":
+			{
+				"buffer_size": 10944,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Template/Ventas/index.ctp",
+			"settings":
+			{
+				"buffer_size": 9023,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Template/Ventas/listado.ctp",
+			"settings":
+			{
+				"buffer_size": 10698,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "webroot/js/ventas/add.js",
+			"settings":
+			{
+				"buffer_size": 31863,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/Controller/VentasController.php",
+			"settings":
+			{
+				"buffer_size": 13919,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "config/app.php",
+			"settings":
+			{
+				"buffer_size": 15853,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Template/Plugin/AdminLTE/Pages/home.ctp",
+			"settings":
+			{
+				"buffer_size": 18507,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "vendor/maiconpinto/cakephp-adminlte-theme/webroot/plugins/datatables/dataTables.bootstrap.css",
+			"settings":
+			{
+				"buffer_size": 8849,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Controller/RubrosController.php",
+			"settings":
+			{
+				"buffer_size": 4423,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Controller/ProductosController.php",
+			"settings":
+			{
+				"buffer_size": 9596,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/wamp/www/labarricalte",
+		"/C/wamp/www/labarricalte/config",
+		"/C/wamp/www/labarricalte/src",
+		"/C/wamp/www/labarricalte/src/Controller",
+		"/C/wamp/www/labarricalte/src/Controller/Component",
+		"/C/wamp/www/labarricalte/src/Model",
+		"/C/wamp/www/labarricalte/src/Template",
+		"/C/wamp/www/labarricalte/src/Template/Extracciones",
+		"/C/wamp/www/labarricalte/src/Template/Plugin",
+		"/C/wamp/www/labarricalte/src/Template/Plugin/AdminLTE",
+		"/C/wamp/www/labarricalte/src/Template/Plugin/AdminLTE/Pages",
+		"/C/wamp/www/labarricalte/src/Template/Rubros",
+		"/C/wamp/www/labarricalte/src/Template/Ventas",
+		"/C/wamp/www/labarricalte/webroot",
+		"/C/wamp/www/labarricalte/webroot/css",
+		"/C/wamp/www/labarricalte/webroot/css/pace",
+		"/C/wamp/www/labarricalte/webroot/js",
+		"/C/wamp/www/labarricalte/webroot/js/ventas"
+	],
+	"file_history":
+	[
+		"/C/wamp/www/labarricalte/src/Template/Ventas/resumen.ctp",
+		"/C/wamp/www/labarricalte/src/Controller/PromotionsController.php",
+		"/C/wamp/www/labarricalte/src/Template/Productos/edit.ctp",
+		"/C/wamp/www/labarricalte/webroot/js/productos/edit.js",
+		"/C/wamp/www/labarricalte/src/Template/Plugin/AdminLTE/Pages/home.ctp",
+		"/C/wamp/www/labarricalte/src/Controller/VentasController.php",
+		"/C/wamp/www/labarricalte/webroot/js/promotions/add.js",
+		"/C/wamp/www/labarricalte/src/Template/Promotions/edit.ctp",
+		"/C/wamp/www/labarricalte/webroot/css/newstyle.css",
+		"/C/wamp/www/labarricalte/webroot/js/compras/add.js",
+		"/C/wamp/www/labarricalte/src/Template/Productos/index.ctp",
+		"/C/wamp/www/labarricalte/src/Controller/ProductosController.php",
+		"/C/wamp/www/labarricalte/src/Template/Ventas/addventa.ctp",
+		"/C/wamp/www/labarricalte/src/Template/Promotions/add.ctp",
+		"/C/wamp/www/labarricalte/src/Model/Entity/Producto.php",
+		"/C/wamp/www/labarricalte/src/Template/Productos/edit.ctp.bak",
+		"/C/wamp/www/labarricalte/src/Template/Productos/add.ctp",
+		"/C/wamp/www/labarricalte/src/Template/Productos/resumen.ctp",
+		"/C/wamp/www/labarricalte/webroot/js/productos/resumen.js",
+		"/C/wamp/www/labarricalte/webroot/js/rubros/resumen.js",
+		"/C/wamp/www/labarricalte/src/Template/Rubros/resumen.ctp",
+		"/C/wamp/www/labarricalte/src/Model/Table/PagosTable.php",
+		"/C/wamp/www/labarricalte/src/Controller/PagosController.php",
+		"/C/wamp/www/labarricalte/src/Template/Ventas/index.ctp",
+		"/C/wamp/www/labarricalte/webroot/js/ventas/add.js",
+		"/C/Users/Augusto/Desktop/Proyecto Sistema de Venta Online/Sistema de Venta Online Web y Mobile",
+		"/C/wamp/www/labarricalte/src/Model/Table/ProductosTable.php",
+		"/C/wamp/www/labarricalte/src/Template/Pagos/view.ctp",
+		"/C/wamp/www/labarricalte/src/Template/Plugin/AdminLTE/Element/footer.ctp",
+		"/C/Users/Augusto/Downloads/responsive-html-template/responsive-html-template/index.html",
+		"/C/wamp/www/labarricalte/src/Template/Ventas/view.ctp",
+		"/C/wamp/www/labarricalte/src/Template/Layout/adminlte.ctp",
+		"/C/wamp/www/labarricalte/config/app.php",
+		"/C/Users/Augusto/Desktop/txt/CONTA TODO",
+		"/C/Users/Augusto/Desktop/txt/Buenas tardes, mi nombre es Augusto Guerrero y soy",
+		"/C/wamp/www/labarricalte/src/Template/Promotions/index.ctp",
+		"/C/wamp/www/labarricalte/src/Template/Promotions/view.ctp",
+		"/C/wamp/www/labarricalte/src/Controller/RubrosController.php",
+		"/C/wamp/www/labarricalte/src/Model/Entity/Promotion.php",
+		"/C/Users/Augusto/Desktop/Proyecto La Barrica BEBIDAS POS/Requerimientos de Romano",
+		"/C/wamp/www/labarricalte/src/Model/Table/PromotionsTable.php",
+		"/C/wamp/www/conta/app/webroot/files/ventas/222/10-2018/ventas/ventas 10-18.txt",
+		"/C/wamp/www/labarricalte/src/Model/Entity/Detalleventa.php",
+		"/C/wamp/www/labarricalte/src/Template/Plugin/AdminLTE/Element/aside/sidebar-menu.ctp",
+		"/C/Users/Augusto/AppData/Local/Temp/fz3temp-2/ventas 10-18.txt",
+		"/C/Users/Augusto/AppData/Local/Temp/fz3temp-2/Ventas para CITI.txt",
+		"/C/Users/Augusto/AppData/Local/Temp/fz3temp-2/Ventas para CITI - arreglo RI.txt",
+		"/C/wamp/www/labarricalte/src/Template/Compras/index.ctp",
+		"/C/wamp/www/labarricalte/src/Template/Clientes/index.ctp",
+		"/C/wamp/www/labarricalte/src/Controller/ComprasController.php",
+		"/C/wamp/www/labarricalte/vendor/cakephp/cakephp/src/View/Helper/FormHelper.php",
+		"/C/wamp/www/labarricalte/src/Template/Clientes/add.ctp",
+		"/C/wamp/www/labarricalte/src/Template/Plugin/AdminLTE/Element/nav-top.ctp",
+		"/C/Users/Augusto/Dropbox/La Barrica/App/labarricalte/tmp/debug_kit.sqlite-journal",
+		"/C/Users/Augusto/Dropbox/La Barrica/App/labarricalte/tmp/debug_kit.sqlite",
+		"/C/wamp/www/cartsample/app/Plugin/Cart/View/Checkout/index.ctp",
+		"/C/wamp/www/cartsample/app/Plugin/Cart/View/Carts/view.ctp",
+		"/C/wamp/www/labarricalte/src/Model/Entity/Compra.php",
+		"/C/wamp/www/labarricalte/src/Template/Compras/add.ctp",
+		"/C/wamp/www/labarricalte/src/Model/Table/ComprobantesTable.php",
+		"/C/wamp/www/labarricalte/src/Model/Table/ComprasTable.php",
+		"/C/wamp/www/labarricalte/src/Template/Plugin/AdminLTE/Element/aside/user-panel.ctp",
+		"/C/wamp/www/labarricalte/src/Model/Entity/Comprobante.php",
+		"/C/wamp/www/labarricalte/src/Template/Clientes/view.ctp",
+		"/C/wamp/www/labarricalte/src/Model/Table/VentasTable.php",
+		"/C/wamp/www/labarricalte/src/Template/Plugin/AdminLTE/Element/aside-control-sidebar.ctp",
+		"/C/wamp/www/labarricalte/src/Template/Productos/actualizarxrubro.ctp",
+		"/C/wamp/www/labarricalte/src/Controller/CajasController.php",
+		"/C/wamp/www/labarricalte/src/Template/Cajas/cerrar.ctp",
+		"/C/wamp/www/labarricalte/src/Template/Pagos/index.ctp",
+		"/C/wamp/www/labarricalte/src/Template/Plugin/AdminLTE/Element/home.ctp",
+		"/C/wamp/www/labarricalte/src/Model/Entity/Venta.php",
+		"/C/wamp/www/conta/app/webroot/css/cake.generic.css",
+		"/C/wamp/www/conta/app/View/Ventas/exportartxt.ctp",
+		"/C/wamp/www/conta/app/View/Gestionventas/view.ctp",
+		"/C/wamp/www/conta/app/View/Depositos/view.ctp",
+		"/C/wamp/www/labarricalte/src/Template/Rubros/index.ctp",
+		"/C/wamp/www/conta/app/View/Empleados/papeldetrabajosueldos.ctp",
+		"/C/wamp/www/conta/app/View/Papelesdetrabajos/iva.ctp",
+		"/C/wamp/www/labarricalte/src/Template/Cajas/index.ctp",
+		"/C/Users/Augusto/Downloads/OSASUN S.R.L.-09-2018Alicuotas (2).txt",
+		"/C/Users/Augusto/Downloads/OSASUN S.R.L.-09-2018Compras.txt",
+		"/C/wamp/www/labarricalte/webroot/css/newbase.css",
+		"/C/wamp/www/labarricalte/src/Template/Cajas/add.ctp",
+		"/C/wamp/www/labarricalte/vendor/maiconpinto/cakephp-adminlte-theme/webroot/plugins/ckeditor/ckeditor.js",
+		"/C/wamp/www/labarricalte/src/Model/Entity/Pago.php",
+		"/C/wamp/www/labarricalte/src/Template/Pagos/add.ctp",
+		"/C/wamp/www/labarricalte/src/Controller/ClientesController.php",
+		"/C/Users/Augusto/Dropbox/La Barrica/BackUp Data Base/localhost25-10-2018.sql",
+		"/C/wamp/www/labarricalte/src/Model/Table/ClientesTable.php",
+		"/C/wamp/www/labarricalte/src/Template/Productos/search.ctp",
+		"/C/wamp/www/labarricalte/config/permissions.php",
+		"/C/wamp/www/labarricalte/config/routes.php",
+		"/C/wamp/www/labarricalte/src/Template/Layout/default.ctp",
+		"/C/Users/Augusto/Dropbox/La Barrica/App/labarricalte/src/Controller/error.log",
+		"/C/wamp/www/labarricalte/src/Model/Table/CajasTable.php",
+		"/C/wamp/www/labarricalte/src/Controller/ExtraccionesController.php",
+		"/C/wamp/www/labarricalte/webroot/js/cajas/add.js",
+		"/C/wamp/www/labarricalte/src/Model/Table/RubrosTable.php",
+		"/C/wamp/www/labarricalte/vendor/cakephp/cakephp/src/Database/Expression/QueryExpression.php",
+		"/C/Users/Augusto/Dropbox/La Barrica/App/labarricalte/src/Template/Plugin/AdminLTE/Element/aside/sidebar-menu.ctp",
+		"/C/Users/Augusto/Dropbox/La Barrica/App/labarricalte/src/Template/Plugin/AdminLTE/Element/aside-main-sidebar.ctp",
+		"/C/wamp/www/labarricalte/src/Template/Rubros/view.ctp",
+		"/C/wamp/www/labarricalte/src/Template/Ventas/edit.ctp",
+		"/C/wamp/www/labarricalte/src/Template/Puntodeventas/edit.ctp",
+		"/C/wamp/www/labarricalte/src/Template/Rubros/edit.ctp",
+		"/C/wamp/www/labarricalte/src/Controller/AppController.php",
+		"/C/Users/Augusto/Dropbox/La Barrica/App/labarricalte/config/app.php",
+		"/C/Users/Augusto/Dropbox/Web/SIGESEC/aplicacion web/sigesec2.5/app/Config/database.php",
+		"/C/wamp/www/conta/app/Config/database.php",
+		"/C/Users/Augusto/Dropbox/La Barrica/BackUp Data Base/localhost.sql",
+		"/C/Users/Augusto/Downloads/Hake S.R.L.-09-2018Compras.txt",
+		"/C/Users/Augusto/Downloads/Hake S.R.L.-09-2018ventas.txt",
+		"/C/Users/Augusto/Downloads/Hake S.R.L.-09-2018alicuotas (1).txt",
+		"/C/wamp/www/labarricalte/src/Controller/PuntodeventasController.php",
+		"/C/wamp/www/labarricalte/src/Template/Puntodeventas/index.ctp",
+		"/C/wamp/www/labarricalte/src/Model/Table/UsersTable.php",
+		"/C/wamp/www/labarricalte/src/Model/Entity/User.php",
+		"/C/wamp/www/labarricalte/config/users.php",
+		"/C/wamp/www/labarricalte/src/Controller/UsersController.php",
+		"/C/wamp/www/labarricalte/src/Model/Entity/Extraccione.php",
+		"/C/wamp/www/labarricalte/src/Template/Extracciones/add.ctp",
+		"/C/wamp/www/labarricalte/src/Model/Entity/Caja.php",
+		"/C/wamp/www/labarricalte/src/Model/Table/ExtraccionesTable.php",
+		"/C/wamp/www/labarricalte/src/Model/Table/PuntodeventasTable.php",
+		"/C/wamp/www/labarricalte/vendor/maiconpinto/cakephp-adminlte-theme/src/Template/Pages/forms/advanced.ctp",
+		"/C/wamp/www/labarricalte/src/Model/Table/MyUsersTable.php",
+		"/C/wamp/www/labarricalte/src/Model/Entity/MyUser.php"
+	],
+	"find":
+	{
+		"height": 25.0
+	},
+	"find_in_files":
+	{
+		"height": 121.0,
+		"where_history":
+		[
+			"C:\\wamp\\www\\spidermovies",
+			"C:\\wamp\\www\\spidermovies\\app",
+			"C:\\wamp\\www\\spidermovies\\app\\Plugin",
+			"C:\\wamp\\www\\spider"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"fecha",
+			"pagina",
+			"paginat",
+			"timezo",
+			"utc",
+			"dataso",
+			"time",
+			"APP_DEFAULT_TIMEZONE",
+			"APP_DEFAULT_LOCALE",
+			"timez",
+			"init",
+			"datepicker",
+			"daterangepicker",
+			"reservationtime",
+			"ventas",
+			"/",
+			"productoId",
+			"gananciaPromedio",
+			"calcularProducto",
+			"hidden",
+			"unlockField",
+			"detalleventas",
+			"importedescuento",
+			"calcularVenta",
+			"numDetalle",
+			"importedescuento",
+			"calcularPrecioUnidad",
+			"roducto.costo",
+			" producto.costo",
+			"edit",
+			"calcularProducto",
+			"calcularGananciaProducto",
+			"precio",
+			"tipoprecio",
+			"style",
+			"cantpack",
+			"tipoprec",
+			"tipopre",
+			"debug",
+			"unlockDetallefields",
+			"unlockField",
+			"preciopack_",
+			"preciopack",
+			"codig",
+			"codigo",
+			"preciopack0",
+			"calcularProducto",
+			"gananciapack",
+			"calcularGanancia",
+			"rout",
+			"selectpr",
+			"toFixed",
+			"total",
+			"myPrecioSelect",
+			"tipoprecio",
+			"CatchFormProducto",
+			"format",
+			"ganancia",
+			"erro",
+			"searchProductos",
+			"calcularProducto",
+			"number",
+			"debug",
+			"cake",
+			"modal-info",
+			"prod",
+			"DataTable",
+			"presupuesto",
+			"chan",
+			"$producto['rubro']['id']",
+			"misProductos",
+			"formAgregarPromocion",
+			"agregar",
+			"aja",
+			"producto",
+			"agregarDetalle",
+			"calcularProducto",
+			"costo",
+			"unlockDetallefields",
+			"venta",
+			"detalleventa",
+			"detalleVenta",
+			"DetalleVenta",
+			"Productos",
+			"\n",
+			"trig",
+			"tipoprecio",
+			"'}))\n",
+			"css",
+			"cliente",
+			"porcentajedescuento",
+			"searchProductos",
+			"fech",
+			"fechainicio",
+			"venta",
+			"cajaAbierta",
+			"rig",
+			"agregar",
+			"sales",
+			"sales ",
+			"puntodecompra",
+			"venta",
+			"Venta",
+			"venta",
+			"pago",
+			"Venta",
+			"pago",
+			"nombre",
+			"comprobante",
+			"Venta",
+			"venta",
+			"Venta",
+			"venta",
+			"pago",
+			"Pago",
+			"cuentacorriente",
+			"ultimaventa[0]['ultimaventa']",
+			"label",
+			"numero",
+			"extra",
+			"modal-in",
+			"request",
+			"find",
+			"fa",
+			"side",
+			"controlle",
+			"controll",
+			"side"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"rubroId",
+			"text",
+			"$rubroId",
+			"rubroId",
+			"promotion",
+			"Promotion",
+			"Promotions",
+			"\n",
+			"",
+			"\n",
+			"",
+			"compra",
+			"Compra",
+			"compra",
+			"Compra",
+			"compra",
+			"Compra",
+			"compra",
+			"obro",
+			"cobro",
+			"Cobro",
+			"'cliente'",
+			"$venta['clientes']",
+			"$venta",
+			"Rubro",
+			"\n&data[Compra]",
+			"producto",
+			"Producto",
+			"Compra",
+			"compra",
+			"Compra",
+			"compra",
+			"Pago",
+			"pago",
+			"pagos",
+			"Producto",
+			"producto",
+			"productos",
+			"puntodeventa",
+			"Puntodeventa",
+			"ubro",
+			"rubro",
+			"Rubro",
+			"Producto",
+			"producto",
+			"Compra",
+			"compra",
+			"detalleventas.",
+			"Detalleventas.",
+			"'",
+			".",
+			"",
+			"Venta.0"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 4,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/Template/Productos/resumen.ctp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11186,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2517,
+								2517
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 989.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/Template/Rubros/resumen.ctp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10944,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4298,
+								4298
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1392.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/Template/Ventas/index.ctp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9023,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2040,
+								2040
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 384.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/Template/Ventas/listado.ctp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10698,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10470,
+								10470
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3042.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "webroot/js/ventas/add.js",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 31863,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3780,
+								3790
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 7248.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/Controller/VentasController.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 13919,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2706,
+								2706
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1188.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "config/app.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 15853,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								12333,
+								12339
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 4578.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/Template/Plugin/AdminLTE/Pages/home.ctp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 18507,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1804,
+								1804
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 317.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "vendor/maiconpinto/cakephp-adminlte-theme/webroot/plugins/datatables/dataTables.bootstrap.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8849,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1030,
+								1030
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 480.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "src/Controller/RubrosController.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4423,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1493,
+								1493
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 64.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "src/Controller/ProductosController.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9596,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2626,
+								2626
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 395.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 43.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "labarricasublime.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 606.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 278.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
