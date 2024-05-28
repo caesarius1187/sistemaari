@@ -56,7 +56,12 @@ if(!empty($cajasabiertas)){
     </li>
     <li>
         <a href="<?php echo $this->Url->build('/clientes'); ?>">
-            <i class="fa fa-male"></i> <span>Clientes/Provedores</span>
+            <i class="fa fa-male"></i> <span>Clientes</span>
+        </a>
+    </li>
+    <li>
+        <a href="<?php echo $this->Url->build('/provedores'); ?>">
+            <i class="fa fa-male"></i> <span>Provedores</span>
         </a>
     </li>
     <li class="treeview">

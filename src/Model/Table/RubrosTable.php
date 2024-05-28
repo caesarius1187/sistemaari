@@ -39,6 +39,9 @@ class RubrosTable extends Table
         $this->setDisplayField('nombre');
         $this->setPrimaryKey('id');
 
+        $this->belongsTo('Empresas', [
+            'foreignKey' => 'empresa_id'
+        ]);
         $this->hasMany('Productos', [
             'foreignKey' => 'rubro_id'
         ]);

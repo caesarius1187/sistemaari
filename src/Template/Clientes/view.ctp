@@ -65,7 +65,6 @@ $this->Html->script([
                         <div class="resumen box-header">
                             <?php 
                             $totalVentasSinCobrar = 0;
-                            $totalCompras = 0;
                             $cuentacorriente = [];
                             foreach ($cliente->ventas as $venta){
                                 $key = $venta->created->i18nFormat('yyyy MM dd HH:mm:ss');
@@ -78,19 +77,7 @@ $this->Html->script([
                                 //if($ventas->cobrado!=1)
                                 $totalVentasSinCobrar+=$venta->total;
                             } 
-                            foreach ($cliente->compras as $compra){
-                                $key = $compra->created->i18nFormat('yyyy MM dd HH:mm:ss');
-                                $key .= ' Compra '.$compra->id;
-                                $cuentacorriente[$key] = [];
-                                $cuentacorriente[$key]['importe'] = $compra->total;
-                                $cuentacorriente[$key]['concepto'] = 'Compra';
-                                $cuentacorriente[$key]['fecha'] = $compra->created->i18nFormat('dd-MM-yyyy HH:mm:ss');
-                                $cuentacorriente[$key]['id'] = $compra->id;
-                                //if($ventas->cobrado!=1)
-                                $totalCompras+=$compra->total;
-                            } 
                             $totalCobrosRecibidos = 0;
-                            $totalPagos = 0;
                             foreach ($cliente->pagos as $pago){
                                 $key = $pago->created->i18nFormat('yyyy MM dd HH:mm:ss');
                                 $key .= ' Cobro '.$pago->id;
@@ -100,19 +87,6 @@ $this->Html->script([
                                 $cuentacorriente[$key]['fecha'] = $pago->created->i18nFormat('dd-MM-yyyy HH:mm:ss');
                                 $cuentacorriente[$key]['id'] = $pago->id;
                                 $cuentacorriente[$key]['metodo'] = $pago['metodo'];
-                                if($pago['tipo']=='pago'){
-                                    $cuentacorriente[$key]['concepto'] = 'Pago';
-                                    if($pago['metodo']=='visa'){
-                                        $totalPagos += $pago->importe;
-                                    }else if($pago['metodo']=='mastercard'){
-                                        $totalPagos += $pago->importe;
-                                    }else if($pago['metodo']=='efectivo'){
-                                        $totalPagos += $pago->importe;
-                                    }else if($pago['metodo']=='cuentacorriente'){
-                                        //no registro pago por que fue a cuenta corriente
-                                        //$totalCobrosRecibidos += $pagos->importe;
-                                    }   
-                                }
                                 if($pago['tipo']=='cobro'){
                                     $cuentacorriente[$key]['concepto'] = 'Cobro';
                                     if($pago['metodo']=='visa'){
@@ -146,14 +120,12 @@ $this->Html->script([
                                 $cuentacorriente[$km]['saldo']=$saldoCC;
                             }
                             //fin calculo saldos
-                            $saldo = -$totalVentasSinCobrar + $totalCobrosRecibidos + $totalCompras - $totalPagos;
+                            $saldo = -$totalVentasSinCobrar + $totalCobrosRecibidos ;
                             krsort($cuentacorriente);
                             ?>
                             <h2 class="box-title">
                                 Total de Ventas: $<?php echo number_format($totalVentasSinCobrar,2,',','.'); ?></br>
                                 Total de Cobros recibidos: $<?php echo number_format($totalCobrosRecibidos,2,',','.'); ?></br>
-                                Total de Compras: $<?php echo number_format($totalCompras,2,',','.'); ?></br>
-                                Total de Pagos emitidos: $<?php echo number_format($totalPagos,2,',','.'); ?></br>
                                 <?php echo (($saldo>0)?'A Favor':'A Pagar').": $".number_format($saldo,2,',','.'); ?></h2>
                         </div>
                         <div class="related">
@@ -166,8 +138,6 @@ $this->Html->script([
                                     <th scope="col"><?= __('Concepto') ?></th>
                                     <th scope="col"><?= __('Ventas') ?></th>
                                     <th scope="col"><?= __('Cobros') ?></th>
-                                    <th scope="col"><?= __('Compras') ?></th>
-                                    <th scope="col"><?= __('Pagos') ?></th>                         
                                     <th scope="col"><?= __('Saldo') ?></th>
                                 </tr>
                                 </thead>
@@ -232,19 +202,6 @@ $this->Html->script([
                                             echo "$".number_format($movimiento['importe'], 2, ",", "."); 
                                         }?>                                            
                                     </td>
-                                    <td class="tdWithNumber"><?php
-                                        if($movimiento['concepto']=='Compra'){
-                                            echo "$".number_format($movimiento['importe'], 2, ",", "."); 
-                                        }?>                                            
-                                    </td>
-                                    <td class="tdWithNumber"><?php
-                                        if($movimiento['concepto']=='Pago'){
-                                           echo "$".number_format($movimiento['importe'], 2, ",", "."); 
-                                        }?>                                            
-                                    </td>
-                                    <?php
-
-                                    ?>                         
                                     <td class="tdWithNumber">$<?= number_format($movimiento['saldo'], 2, ",", "."); ?></td>      
                                     <?php /*  
                                     <td><?= h($saldoVenta) ?></td>        

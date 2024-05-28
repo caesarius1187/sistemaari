@@ -22,8 +22,11 @@ class ClientesController extends AppController
      * @return \Cake\Http\Response|void
      */
     public function index()
-    {
-        $clientes =$this->Clientes->find('all');
+    {   
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        $clientes =$this->Clientes->find('all',['conditions'=>['Clientes.empresa_id'=>$empresaId]]);
+
         $this->set(compact('clientes'));
         
         $micliente = $this->Clientes->newEntity();
@@ -45,9 +48,15 @@ class ClientesController extends AppController
             $this->Flash->error(__('Error al intentar abrir la vista. Por favor intentelo de nuevo mas tarde.'));
             return $this->redirect(['action' => 'index']);
         }
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
         $cliente = $this->Clientes->get($id, [
-            'contain' => ['Ventas','Pagos','Compras']
+            'contain' => ['Ventas','Pagos']
         ]);
+        if($cliente->empresa_id != $empresaId){
+            $this->Flash->error(__('Error al intentar abrir la vista. No existe cliente. Por favor intentelo de nuevo mas tarde.'));
+            return $this->redirect(['action' => 'index']);
+        }
 
         $this->set('cliente', $cliente);
     }
@@ -67,6 +76,9 @@ class ClientesController extends AppController
            // New entity with nested associations
             $entity = $clientesTable->newEntity($this->request->getData());
             $respuesta = "";
+            $session = $this->request->getSession(); // less than 3.5
+            $empresaId = $session->read('Auth.User')['empresa_id'];
+            $entity->empresa_id = $empresaId;
             if ($clientesTable->save($entity)) {
                 // The $article entity contains the id now
                 $id = $entity->id;
@@ -107,14 +119,20 @@ class ClientesController extends AppController
         $cliente = $this->Clientes->get($id, [
             'contain' => []
         ]);
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        if($cliente->empresa_id != $empresaId){
+            $this->Flash->error(__('Error al intentar abrir la vista. No existe cliente. Por favor intentelo de nuevo mas tarde.'));
+            return $this->redirect(['action' => 'index']);
+        }
         if ($this->request->is(['patch', 'post', 'put'])) {
             $cliente = $this->Clientes->patchEntity($cliente, $this->request->getData());
             if ($this->Clientes->save($cliente)) {
-                $this->Flash->success(__('The cliente has been saved.'));
+                $this->Flash->success(__('El cliente ha sido modificado.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The cliente could not be saved. Please, try again.'));
+            $this->Flash->error(__('El cliente no pudo ser modificado. Por favor intente mas tarde.'));
         }
         $this->set(compact('cliente'));
     }
@@ -130,10 +148,16 @@ class ClientesController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $cliente = $this->Clientes->get($id);
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        if($cliente->empresa_id != $empresaId){
+            $this->Flash->error(__('Error al intentar eliminar. No existe cliente. Por favor intentelo de nuevo mas tarde.'));
+            return $this->redirect(['action' => 'index']);
+        }
         if ($this->Clientes->delete($cliente)) {
-            $this->Flash->success(__('The cliente has been deleted.'));
+            $this->Flash->success(__('El cliente ha sido eliminado.'));
         } else {
-            $this->Flash->error(__('The cliente could not be deleted. Please, try again.'));
+            $this->Flash->error(__('El cliente no pudo ser elimindado. Por favor intente mas tarde.'));
         }
 
         return $this->redirect(['action' => 'index']);

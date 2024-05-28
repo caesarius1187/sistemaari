@@ -47,8 +47,6 @@ class VentasTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-
-
         $this->belongsTo('Clientes', [
             'foreignKey' => 'cliente_id'
         ]);
@@ -57,6 +55,9 @@ class VentasTable extends Table
         ]);
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id'
+        ]);
+        $this->belongsTo('Empresas', [
+            'foreignKey' => 'empresa_id'
         ]);
         $this->hasMany('Detalleventas', [
             'foreignKey' => 'venta_id'

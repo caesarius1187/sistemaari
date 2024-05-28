@@ -51,6 +51,9 @@ class ProductosTable extends Table
             'foreignKey' => 'rubro_id',
             'joinType' => 'INNER'
         ]);
+        $this->belongsTo('Empresas', [
+            'foreignKey' => 'empresa_id'
+        ]);
         $this->hasMany('Detallecompras', [
             'foreignKey' => 'producto_id'
         ]);
@@ -65,7 +68,7 @@ class ProductosTable extends Table
         ]);
     }
 
-    public function actualizarPrecioPorRubro($rubro,$incremento){
+    public function actualizarPrecioPorRubro($rubro,$incremento,$empresaId){
         $productos = TableRegistry::get('Productos');
         $incTotal = 1+($incremento/100); 
         $query = $productos->query();
@@ -78,7 +81,7 @@ class ProductosTable extends Table
                     'modified'=>date('Y-m-d h:i:s'),
                 ]
             )
-            ->where(['rubro_id' => $rubro])
+            ->where(['rubro_id' => $rubro,'empresa_id' => $empresaId])
             ->execute(); 
 
         $query2->update()
@@ -95,6 +98,7 @@ class ProductosTable extends Table
             ->where(
                     [
                         'rubro_id' => $rubro,
+                        'empresa_id' => $empresaId,
                         'promocion = 0',
                     ]
             )
@@ -112,6 +116,7 @@ class ProductosTable extends Table
             ->where(
                     [
                         'rubro_id' => $rubro,
+                        'empresa_id' => $empresaId,
                         'promocion = 0',
                     ]
             )
@@ -200,12 +205,16 @@ class ProductosTable extends Table
         return $query;
     }
     public function updatePrecioPromocion($id){
-         $conditionsproduct = [
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        $conditionsproduct = [
             'contain' => [
                 'Promotions'
             ],
             'conditions' => [
-                'Productos.promocion' => 1
+                'Productos.promocion' => 1,
+                'Productos.empresa_id' => $empresaId,
+
             ]
         ];
         $productos = $this->find('all',$conditionsproduct);

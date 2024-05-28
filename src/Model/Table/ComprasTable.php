@@ -38,15 +38,9 @@ class ComprasTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->belongsTo('Clientes', [
-            'foreignKey' => 'cliente_id'
-        ]);
-        $this->hasMany('Detallecompras', [
-            'foreignKey' => 'compra_id'
-        ]);
-        $this->hasMany('Pagos', [
-            'foreignKey' => 'compra_id'
-        ]);
+        $this->belongsTo('Provedores', [
+            'foreignKey' => 'provedore_id'
+        ]);       
         $this->belongsTo('Puntodeventas', [
             'foreignKey' => 'puntodeventa_id'
         ]);
@@ -55,6 +49,16 @@ class ComprasTable extends Table
         ]);
         $this->belongsTo('Comprobantes', [
             'foreignKey' => 'comprobante_id'
+        ]);
+        $this->belongsTo('Empresas', [
+            'foreignKey' => 'empresa_id'
+        ]);
+        
+        $this->hasMany('Detallecompras', [
+            'foreignKey' => 'compra_id'
+        ]);
+        $this->hasMany('Pagos', [
+            'foreignKey' => 'compra_id'
         ]);
     }
 

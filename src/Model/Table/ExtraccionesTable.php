@@ -42,6 +42,9 @@ class ExtraccionesTable extends Table
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id'
         ]);
+        $this->belongsTo('Empresas', [
+            'foreignKey' => 'empresa_id'
+        ]);
 
     }
 

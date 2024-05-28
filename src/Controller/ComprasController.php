@@ -42,21 +42,25 @@ class ComprasController extends AppController
               $cajaAbierta = true;
             }
         }
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
         if($cajaAbierta){
           $conditions = [
-              'contain' => ['Clientes', 'Puntodeventas'],
+              'contain' => ['Provedores', 'Puntodeventas'],
               'conditions'=>[
                   'Compras.fecha <= "'.$fechaconsultahasta.'"',
                   'Compras.fecha >= "'.$fechaconsultadesde.'"',
                   'Compras.puntodeventa_id' => $micaja['puntodeventa_id'],
+                  'Compras.empresa_id' => $empresaId,
               ]
           ];
         }else{
           $conditions = [
-              'contain' => ['Clientes', 'Puntodeventas'],
+              'contain' => ['Provedores', 'Puntodeventas'],
               'conditions'=>[
                   'Compras.fecha <= "'.$fechaconsultahasta.'"',
                   'Compras.fecha >= "'.$fechaconsultadesde.'"',
+                  'Compras.empresa_id' => $empresaId,
               ]
           ];
         }
@@ -75,9 +79,15 @@ class ComprasController extends AppController
      */
     public function view($id = null)
     {
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
         $compra = $this->Compras->get($id, [
             'contain' => ['Detallecompras']
         ]);
+        if($compra['empresa_id'] != $empresaId ){
+            $this->Flash->error(__('La Compra no existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
 
         $this->set('compra', $compra);
     }
@@ -105,9 +115,10 @@ class ComprasController extends AppController
       $this->set('micaja',$micaja);
       $this->loadModel('Detallecompras');
       $compra = $this->Compras->newEntity();
-      $cliente = $this->Compras->Clientes->newEntity();
+      $provedore = $this->Compras->Provedores->newEntity();
       $producto = $this->Productos->newEntity();
-
+      $session = $this->request->getSession(); // less than 3.5
+      $empresaId = $session->read('Auth.User')['empresa_id'];
       if ($this->request->is('post')) {
               $this->autoRender = false;
               $comprasTable = TableRegistry::get('Compras');
@@ -118,6 +129,8 @@ class ComprasController extends AppController
                   ]
               ]);
               $respuesta = "";
+             
+              $entity->empresa_id = $empresaId;
               if ($comprasTable->save($entity)) {
                   // The $article entity contains the id now
                   $id = $entity->id;
@@ -167,23 +180,22 @@ class ComprasController extends AppController
               return $this->response;        
 
       }
-      $clientes = $this->Compras->Clientes->find('list', ['limit' => 200]);
-      $puntodeventas = $this->Compras->Puntodeventas->find('list', ['limit' => 200]);
-      $rubros = $this->Productos->Rubros->find('list', ['limit' => 200]);
-      $users = $this->Compras->Users->find('list', ['limit' => 200]);
+      $provedores = $this->Compras->Provedores->find('list', ['conditions'=>['Provedores.empresa_id' => $empresaId]]);
+      $puntodeventas = $this->Compras->Puntodeventas->find('list', ['conditions'=>['Puntodeventas.empresa_id' => $empresaId]]);
+      $rubros = $this->Productos->Rubros->find('list', ['conditions'=>['Rubros.empresa_id' => $empresaId]]);
+      $users = $this->Compras->Users->find('list', ['conditions'=>['Users.empresa_id' => $empresaId]]);
       
 
-      $this->set(compact('compra','cliente','producto','rubros', 'clientes', 'puntodeventas', 'users'));
+      $this->set(compact('compra','provedore','producto','rubros', 'provedores', 'puntodeventas', 'users'));
 
       $topcompra = $this->Compras->find('all',[
          'fields' => ['ultimacompra' => 'MAX(Compras.numero*1)'],
          'conditions'=>[
-              'Compras.puntodeventa_id'=> $micaja['puntodeventa']['numero']
+              'Compras.puntodeventa_id'=> $micaja['puntodeventa']['numero'],
+              'Compras.empresa_id' => $empresaId
          ]
       ]); 
       $ultimacompra = iterator_to_array($topcompra);      
-      $session = $this->request->getSession(); // less than 3.5
-      // $session = $this->request->getSession(); // 3.5 or more
       $AuthUserId = $session->read('Auth.User')['id'];
       $AuthUserNombre = $session->read('Auth.User')['first_name']." ".$session->read('Auth.User')['last_name'];
 
@@ -191,7 +203,7 @@ class ComprasController extends AppController
 
       //Detalle de Compras
       $detallecompra = $this->Detallecompras->newEntity();
-      $productos = $this->Detallecompras->Productos->find('list');
+      $productos = $this->Detallecompras->Productos->find('list',['conditions'=>['Productos.empresa_id' => $empresaId]]);
       $comprobantes = $this->Compras->Comprobantes->find('list');
       $this->set(compact('detallecompra','comprobantes','productos'));
     }
@@ -205,9 +217,15 @@ class ComprasController extends AppController
      */
     public function edit($id = null)
     {
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
         $compra = $this->Compras->get($id, [
             'contain' => []
         ]);
+        if($compra['empresa_id'] != $empresaId ){
+            $this->Flash->error(__('La Compra no existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
         if ($this->request->is(['patch', 'post', 'put'])) {
             $compra = $this->Compras->patchEntity($compra, $this->request->getData());
             if ($this->Compras->save($compra)) {
@@ -231,6 +249,12 @@ class ComprasController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $compra = $this->Compras->get($id);
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        if($compra['empresa_id'] != $empresaId ){
+            $this->Flash->error(__('La Compra no existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
         if ($this->Compras->delete($compra)) {
             //vamos a buscar todos los detalles que tengan este id
              $conditionsDv = [

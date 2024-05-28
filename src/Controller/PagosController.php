@@ -21,7 +21,10 @@ class PagosController extends AppController
      */
     public function index()
     {
-        $clientes = $this->Pagos->Clientes->find('list', []);
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        $clientes = $this->Pagos->Clientes->find('list', ['conditions'=>['Clientes.empresa_id'=>$empresaId]]);
+        $provedores = $this->Pagos->Provedores->find('list', ['conditions'=>['Provedores.empresa_id'=>$empresaId]]);
         $micaja = [];
         $cajaAbierta = false;
         if(!empty($this->viewVars['cajasabiertas'])){
@@ -36,12 +39,14 @@ class PagosController extends AppController
         }
         $this->set('micaja',$micaja);
         $this->set('clientes',$clientes);
+        $this->set('provedores',$provedores);
 
         $conditions = [
-            'contain' => ['Clientes'],
+            'contain' => ['Clientes','Provedores'],
             'conditions'=>[
                 'Pagos.puntodeventa_id'=>$micaja['puntodeventa_id'],
-                'Pagos.created >= '=>$micaja['apertura']                            
+                'Pagos.created >= '=>$micaja['apertura'],
+                'Pagos.empresa_id' => $empresaId                            
             ],
             'order'=>['Pagos.created asc']
         ];
@@ -49,8 +54,6 @@ class PagosController extends AppController
 
         $this->set(compact('pagos'));
 
-        $session = $this->request->getSession(); // less than 3.5
-        // $session = $this->request->getSession(); // 3.5 or more
         $AuthUserId = $session->read('Auth.User')['id'];
         $AuthUserNombre = $session->read('Auth.User')['first_name']." ".$session->read('Auth.User')['last_name'];
 
@@ -70,9 +73,15 @@ class PagosController extends AppController
      */
     public function view($id = null)
     {
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
         $pago = $this->Pagos->get($id, [
-            'contain' => ['Clientes','Users']
+            'contain' => ['Clientes','Provedores','Users']
         ]);
+        if($pago['empresa_id'] != $empresaId ){
+            $this->Flash->error(__('El Pago no existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
         $this->set('pago', $pago);
     }
 
@@ -84,6 +93,7 @@ class PagosController extends AppController
     public function add()
     {
         $pago = $this->Pagos->newEntity();
+
         if ($this->request->is('post')) {
             $micaja = [];
             $cajaAbierta = false;
@@ -99,11 +109,14 @@ class PagosController extends AppController
             }
             $this->set('micaja',$micaja);
             $miPago = $this->request->getData();
-            
+            $session = $this->request->getSession(); // less than 3.5
+            $empresaId = $session->read('Auth.User')['empresa_id'];
+           
             $toppago = $this->Pagos->find('all',[
                  'fields' => ['ultimopago' => 'MAX(Pagos.numero)'],
                  'conditions'=>[
-                      'Pagos.puntodeventa_id'=> $micaja['puntodeventa']['numero']
+                      'Pagos.puntodeventa_id'=> $micaja['puntodeventa']['numero'],
+                      'Pagos.empresa_id' => $empresaId
                  ]
             ]); 
             $ultimopago = iterator_to_array($toppago);
@@ -111,6 +124,7 @@ class PagosController extends AppController
             $pago = $this->Pagos->patchEntity($pago, $miPago);
             $now = Time::parse($pago['fecha']);
             $pago['fecha'] =  $now->i18nFormat('yyyy-MM-dd HH:mm:ss');
+            $pago['empresa_id'] = $empresaId;
             if ($this->Pagos->save($pago)) {
                 $this->Flash->success(__('El pago ha sido Guardado.'));
                 return $this->redirect(['action' => 'index']);
@@ -139,6 +153,12 @@ class PagosController extends AppController
         $pago = $this->Pagos->get($id, [
             'contain' => []
         ]);
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        if($pago['empresa_id'] != $empresaId ){
+            $this->Flash->error(__('El Pago no existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
         if ($this->request->is(['patch', 'post', 'put'])) {
             $pago = $this->Pagos->patchEntity($pago, $this->request->getData());
             if ($this->Pagos->save($pago)) {
@@ -162,6 +182,12 @@ class PagosController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $pago = $this->Pagos->get($id);
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        if($pago['empresa_id'] != $empresaId ){
+            $this->Flash->error(__('El Pago no existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
         if ($this->Pagos->delete($pago)) {
             $this->Flash->success(__('The pago has been deleted.'));
         } else {

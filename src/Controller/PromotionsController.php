@@ -36,10 +36,13 @@ class PromotionsController extends AppController
     {
         ini_set('memory_limit', '256M');
         $this->loadModel('Productos');
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
         $conditions = [
             'contain' => ['Rubros','Promotions'],
             'conditions' => [
-                'Productos.promocion = 1'
+                'Productos.promocion = 1',
+                'Productos.empresa_id' => $empresaId
             ]
         ];
         $productos = $this->Productos->find('all',$conditions);
@@ -49,10 +52,12 @@ class PromotionsController extends AppController
     public function resumenpromociones()
     {
         ini_set('memory_limit', '256M');
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
         $conditions = [
             'contain' => ['Productos','Productospromocion'],
             'conditions' => [
-                //'Productos.promocion = 0'
+                'Productos.empresa_id' => $empresaId
             ]
         ];
         $promotions = $this->Promotions->find('all',$conditions);
@@ -116,12 +121,19 @@ class PromotionsController extends AppController
                 debug($count);
                 $codigopromocion =  $datos[1];
                 $codigoproducto =  $datos[3];
-
-                $prodProm=$this->Productos->find('all', ['conditions' => ['codigo'=>$codigopromocion]])->first();
-                $prodIng=$this->Productos->find('all', ['conditions' => ['codigo'=>$codigoproducto]])->first();
+                $session = $this->request->getSession(); // less than 3.5
+                $empresaId = $session->read('Auth.User')['empresa_id'];
+                $prodProm=$this->Productos->find('all', ['conditions' => ['codigo'=>$codigopromocion,'empresa_id' => $empresaId]])->first();
+                $prodIng=$this->Productos->find('all', ['conditions' => ['codigo'=>$codigoproducto,'empresa_id' => $empresaId]])->first();
 
                 debug("promocion actualizada: ".$datos[0]." -- codigo: ".$datos[1]." producto actualizado: ".$datos[2]." -- codigo: ".$datos[3]);
-                $query = $this->Promotions->find('all',['conditions'=>['producto_id'=>$prodProm->id,'productopromocion_id'=>$prodIng->id]]);
+                $query = $this->Promotions->find('all',[
+                    'conditions'=>[
+                        'producto_id'=>$prodProm->id,
+                        'productopromocion_id'=>$prodIng->id,
+                        'empresa_id' => $empresaId
+                        ]
+                    ]);
                 foreach($query as $prom){
                     //precio unidad
                     
@@ -136,6 +148,7 @@ class PromotionsController extends AppController
                     $prom->ganancia = $ganancia;
                     $prom->precio = $precio;
                     $prom->cantidad = $cantidad;
+                    $prom->empresa_id = $empresaId;
 
                     $this->Promotions->save($prom);
                 }
@@ -165,10 +178,15 @@ class PromotionsController extends AppController
     public function view($id = null)
     {
         $this->loadModel('Productos');
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
         $producto = $this->Productos->get($id, [
             'contain' => ['Promotions'=>['Productos']]
         ]);
-
+        if($producto['empresa_id'] != $empresaId ){
+            $this->Flash->error(__('El Producto no existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
         $this->set('producto', $producto);
     }
 
@@ -182,10 +200,13 @@ class PromotionsController extends AppController
     {
         $this->loadModel('Productos');
         $producto = $this->Productos->newEntity();
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
 
         if ($this->request->is('post')) {
             $producto = $this->Productos->patchEntity($producto, $this->request->getData(),['associated' => ['Promotions']]);
             $producto->promotions = $this->request->getData()['promotions'];
+            $producto->empresa_id = $empresaId;
             if ($this->Productos->save($producto)) {
                 $id = $producto->id;
                 //guardamos los detalles de ventas
@@ -204,15 +225,16 @@ class PromotionsController extends AppController
             $this->Flash->error(__('Error. No se ha guardado la promocion. Por favor intente de nuevo mas tarde.'));
         }
         $productos = $this->Promotions->Productos->find('list', [
-            'conditions'=>['Productos.promocion'=>0]
+            'conditions'=>['Productos.promocion'=>0,'Productos.empresa_id'=>$empresaId]
         ]);
         $this->set(compact('promotion', 'productos'));
-        $rubros = $this->Productos->Rubros->find('list', []);
+        $rubros = $this->Productos->Rubros->find('list', ['conditions'=>['Rubros.empresa_id'=>$empresaId]]);
         $this->set(compact('producto', 'rubros'));
         $topproducto = $this->Productos->find('all',[
              'fields' => ['ultimoproducto' => 'MAX(Productos.codigo*1)'],
              'conditions'=>[
-                  'Productos.codigo*1 < 10000'
+                  'Productos.codigo*1 < 10000',
+                  'Productos.empresa_id'=>$empresaId
              ]
           ]); 
           $topproducto = iterator_to_array($topproducto);
@@ -232,7 +254,12 @@ class PromotionsController extends AppController
         $producto = $this->Productos->get($id, [
             'contain' => ['Promotions'=>['Productos']]
         ]);
-      
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        if($producto['empresa_id'] != $empresaId ){
+            $this->Flash->error(__('El Producto no existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
         if ($this->request->is('post')) {
             $producto = $this->Productos->patchEntity($producto, $this->request->getData(),['associated' => ['Promotions']]);
             $producto->promotions = $this->request->getData()['promotions'];
@@ -263,9 +290,9 @@ class PromotionsController extends AppController
             $this->Flash->error(__('Error. No se ha modificado la promocion. Por favor intente de nuevo mas tarde.'));
         }else{
         }
-        $productos = $this->Promotions->Productos->find('list', []);
+        $productos = $this->Promotions->Productos->find('list', ['conditions'=>['Productos.empresa_id'=>$empresaId]]);
         $this->set(compact('promotion', 'productos'));
-        $rubros = $this->Productos->Rubros->find('list', []);
+        $rubros = $this->Productos->Rubros->find('list', ['conditions'=>['Rubros.empresa_id'=>$empresaId]]);
         $this->set(compact('producto', 'rubros'));
     }
 
@@ -278,8 +305,18 @@ class PromotionsController extends AppController
      */
     public function delete($id = null)
     {
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        $producto = $this->Productos->get($id, [
+            'contain' => ['Promotions'=>['Productos']]
+        ]);
+        if($producto['empresa_id'] != $empresaId ){
+            $this->Flash->error(__('El Producto no existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
         $this->request->allowMethod(['ajax','post', 'delete']);
         $this->loadModel('Productos');
+        
         $this->Promotions->deleteAll(['producto_id' => $id]);
         if ( $this->Productos->deleteAll(['id' => $id])) {
             $this->Flash->success(__('Promocion eliminada. '));

@@ -30,6 +30,7 @@ class Pago extends Entity
      */
     protected $_accessible = [
         'cliente_id' => true,
+        'provedore_id' => true,
         'puntodeventa_id' => true,
         'user_id' => true,
         'venta_id' => true,

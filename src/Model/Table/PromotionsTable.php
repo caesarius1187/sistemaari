@@ -47,6 +47,9 @@ class PromotionsTable extends Table
             'foreignKey' => 'productopromocion_id',
             'joinType' => 'INNER',
         ]);      
+        $this->belongsTo('Empresas', [
+            'foreignKey' => 'empresa_id'
+        ]);
     }
 
     /**

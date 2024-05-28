@@ -28,7 +28,7 @@ class Compra extends Entity
      */
     protected $_accessible = [
         'presupuesto' => true,
-        'cliente_id' => true,
+        'provedore_id' => true,
         'numero' => true,
         'puntodeventa_id' => true,
         'user_id' => true,
@@ -40,7 +40,7 @@ class Compra extends Entity
         'total' => true,
         'created' => true,
         'modified' => true,
-        'cliente' => true,
+        'provedore' => true,
         'puntodeventa' => true,
         'user' => true  
     ];

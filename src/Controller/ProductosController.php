@@ -34,27 +34,31 @@ class ProductosController extends AppController
     public function index()
     {
         ini_set('memory_limit', '256M');
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        
         $conditions = [
             'contain' => ['Rubros'],
             'conditions' => [
-                'Productos.promocion = 0'
+                'Productos.promocion = 0',
+                'Productos.empresa_id' => $empresaId
             ]
         ];
         $productos = $this->Productos->find('all',$conditions);
         $this->set(compact('productos'));
-        $rubros = $this->Productos->Rubros->find('list', []);
+        $rubros = $this->Productos->Rubros->find('list', ['conditions'=>['Rubros.empresa_id'=>$empresaId]]);
         $this->set(compact('rubros'));
         $topproducto = $this->Productos->find('all',[
              'fields' => ['ultimoproducto' => 'MAX(Productos.codigo*1)'],
              'conditions'=>[
-                  'Productos.codigo*1 < 10000'
+                  'Productos.codigo*1 < 10000',
+                  'Productos.empresa_id' => $empresaId
              ]
           ]); 
         $topproducto = iterator_to_array($topproducto);
         $this->set('topproducto',$topproducto[0]['ultimoproducto']);
         $miproducto = $this->Productos->newEntity();
         $this->set('miproducto',$miproducto);
-        $session = $this->request->getSession(); // less than 3.5
         $AuthUserRole = $session->read('Auth.User')['role'];
         $this->set('AuthUserRole',$AuthUserRole);
     }
@@ -128,9 +132,19 @@ class ProductosController extends AppController
                 //debug($producto->first());
                 //debug($count);
                 //debug("producto actualizado: ".$datos[0]." -- codigo: ".$datos[7]);
-                $query = $this->Productos->findByCodigo($datos[23]);
+                $session = $this->request->getSession(); // less than 3.5
+                $empresaId = $session->read('Auth.User')['empresa_id'];
+                $conditions = [
+                    'conditions' => [
+                        'Productos.codigo' => $datos[23],
+                        'Productos.empresa_id' => $empresaId
+                    ]
+                ];
+                $query = $this->Productos->find('all',$conditions);
                 foreach($query as $prod){
                     
+                    $prod->empresa_id = $empresaId;
+
                     //precio unidad
                     $costo =  str_replace(",", ".", "$datos[2]")*1;
                     $precio = str_replace(",", ".", "$datos[3]")*1;
@@ -225,20 +239,23 @@ class ProductosController extends AppController
     public function resumenproductos()
     {
         ini_set('memory_limit', '256M');
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
         $conditions = [
             'contain' => ['Rubros'],
             'conditions' => [
-                //'Productos.promocion = 0'
+                'Productos.empresa_id' => $empresaId
             ]
         ];
         $productos = $this->Productos->find('all',$conditions);
         $this->set(compact('productos'));
-        $rubros = $this->Productos->Rubros->find('list', []);
+        $rubros = $this->Productos->Rubros->find('list', ['conditions' => ['Rubros.empresa_id'=>$empresaId]]);
         $this->set(compact('rubros'));
         $topproducto = $this->Productos->find('all',[
              'fields' => ['ultimoproducto' => 'MAX(Productos.codigo*1)'],
              'conditions'=>[
-                  'Productos.codigo*1 < 10000'
+                  'Productos.codigo*1 < 10000',
+                  'Productos.empresa_id' => $empresaId
              ]
           ]); 
           $topproducto = iterator_to_array($topproducto);
@@ -254,11 +271,13 @@ class ProductosController extends AppController
         $fechaProductosfin = date('d-m-Y');
         $fechaProductosinicio = date('01-m-Y');
         if ($this->request->is('post')) {
-                $fechaProductosfin = $this->request->getData()['fechahasta'];
-                $fechaProductosinicio = $this->request->getData()['fechadesde'];
+            $fechaProductosfin = $this->request->getData()['fechahasta'];
+            $fechaProductosinicio = $this->request->getData()['fechadesde'];
         }
         $fechaconsultainicio = date('Y-m-d',strtotime($fechaProductosinicio));
         $fechaconsultafin = date('Y-m-d',strtotime($fechaProductosfin));
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
         $conditions = [
             'contain' => [
                 'Detalleventas'=>[
@@ -270,6 +289,7 @@ class ProductosController extends AppController
                 'Ventas.presupuesto' => 0,
                 'Ventas.created >= "'.$fechaconsultainicio.' 00:00:00"',
                 'Ventas.created <= "'.$fechaconsultafin.' 23:59:59"',
+                'Ventas.empresa_id' => $empresaId,
             ]
         ];
         $ventasTable = TableRegistry::get('Ventas');
@@ -278,21 +298,21 @@ class ProductosController extends AppController
         $this->set(compact('fechaconsultainicio','fechaconsultafin','fechaProductosinicio','fechaProductosfin','producto','ventas'));
     }
     public function actualizarxrubro(){
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
         if ($this->request->is(['patch', 'post', 'put'])) {
             debug($this->request->getData());
             $rubro = $this->request->getData()['rubro_id'];
             $incremento = $this->request->getData()['incremento'];
-            if($this->Productos->actualizarPrecioPorRubro($rubro,$incremento)){
+            if($this->Productos->actualizarPrecioPorRubro($rubro,$incremento,$empresaId)){
                 $this->Flash->success(__('Los productos han sido actualizados. El costo se incremento en un '.
                         $incremento
                     .' y se recalcularon precio de venta y precio de venta por stock'));
                 return $this->redirect(['action' => 'index']);
             }
-            
-            
         }
         $producto = $this->Productos->newEntity();
-        $rubros = $this->Productos->Rubros->find('list', ['limit' => 200]);
+        $rubros = $this->Productos->Rubros->find('list', ['conditions' => ['Rubros.empresa_id'=>$empresaId]]);
         $this->set(compact('producto', 'rubros'));
     }    
     /**
@@ -319,6 +339,8 @@ class ProductosController extends AppController
     public function add()
     {
         $producto = $this->Productos->newEntity();
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
         if ($this->request->is('post')) {
             $this->autoRender = false;
             $productosTable = TableRegistry::get('Productos');
@@ -343,6 +365,7 @@ class ProductosController extends AppController
                     ->withStringBody(json_encode($data));
                 return $this->response;        
             }
+            $entity['empresa_id'] = $empresaId ;
             if ($productosTable->save($entity)) {
                 // The $article entity contains the id now
                 $id = $entity->id;
@@ -370,7 +393,7 @@ class ProductosController extends AppController
                 ->withStringBody(json_encode($data));
             return $this->response;        
         }
-        $rubros = $this->Productos->Rubros->find('list', ['limit' => 200]);
+        $rubros = $this->Productos->Rubros->find('list', ['conditions' => ['Rubros.empresa_id'=>$empresaId]]);
         $this->set(compact('producto', 'rubros'));
     }   
     public function search()
@@ -378,17 +401,23 @@ class ProductosController extends AppController
         $this->viewBuilder()->setLayout('ajax');
         $this->request->allowMethod(['ajax','post','get']);
         $this->viewBuilder()->setLayout('default');
-   
+        
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+
         $keyword = $this->request->query('keyword');
         $query = $this->Productos->find('all',[
                 'contain'=>[
                     'Promotions'=>['Productos']
                 ],
                 'conditions' => [
-                    'OR'=>[
-                        'codigo = '=>$keyword,
-                        'codigopack = '=>$keyword,
-                        'nombre = "'.$keyword.'"',
+                    'AND'=>[
+                        'Productos.empresa_id'=>$empresaId,
+                        'OR'=>[
+                            'codigo = '=>$keyword,
+                            'codigopack = '=>$keyword,
+                            'nombre = "'.$keyword.'"',
+                        ]
                     ]
                 ],
                 'order' => ['Productos.nombre'=>'DESC'],
@@ -405,9 +434,13 @@ class ProductosController extends AppController
             $query = $this->params['url']['query'];
             $this->set('query', $query);
 
+            $session = $this->request->getSession(); // less than 3.5
+            $empresaId = $session->read('Auth.User')['empresa_id'];
+
             $productos = $this->Productos->find('all', array(
                 'conditions' => array(
                         'Productos.nombre LIKE' => '%'.$query.'%',
+                        'Productos.empresa_id'=>$empresaId
                     ),
                 'fields' => array(
                     'Productos.nombre'
@@ -440,6 +473,12 @@ class ProductosController extends AppController
         $producto = $this->Productos->get($id, [
             'contain' => []
         ]);
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        if($producto['empresa_id'] != $empresaId ){
+            $this->Flash->error(__('El Producto no existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
         if ($this->request->is(['patch', 'post', 'put'])) {
             $producto = $this->Productos->patchEntity($producto, $this->request->getData());
 
@@ -489,6 +528,12 @@ class ProductosController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $producto = $this->Productos->get($id);
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        if($producto['empresa_id'] != $empresaId ){
+            $this->Flash->error(__('El Producto no existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
         if ($this->Productos->delete($producto)) {
             $this->Flash->success(__('The producto has been deleted.'));
         } else {

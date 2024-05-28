@@ -206,7 +206,7 @@ $this->start('scriptBottom'); ?>
                         'options'=>['pago'=>'Pago','retiro'=>'Retiro'],
                         'empty'=>false                            
                     ]);
-                    echo $this->Form->control('cliente_id', ['label'=>'Proveedor','options' => $clientes, 'empty' => true, 'style'=>'width:164px']);
+                    echo $this->Form->control('provedore_id', ['label'=>'Proveedor','options' => $provedores, 'empty' => true, 'style'=>'width:164px']);
                     echo $this->Form->control('numero',['type'=>'hidden']);
                     echo $this->Form->control('descripcion');
                     echo $this->Form->control('importe');

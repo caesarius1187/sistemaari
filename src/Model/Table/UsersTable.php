@@ -41,6 +41,10 @@ class UsersTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+        
+        $this->belongsTo('Empresas', [
+            'foreignKey' => 'empresa_id'
+        ]);
         $this->hasMany('Cajas', [
             'foreignKey' => 'user_id'
         ]);

@@ -38,15 +38,17 @@ class ClientesTable extends Table
         $this->setDisplayField('nombre');
         $this->setPrimaryKey('id');
 
-        $this->hasMany('Ventas', [
-            'foreignKey' => 'cliente_id'
+        $this->belongsTo('Empresas', [
+            'foreignKey' => 'empresa_id'
         ]);
-        $this->hasMany('Compras', [
+        
+        $this->hasMany('Ventas', [
             'foreignKey' => 'cliente_id'
         ]);
         $this->hasMany('Pagos', [
             'foreignKey' => 'cliente_id'
         ]);
+        
     }
 
     /**

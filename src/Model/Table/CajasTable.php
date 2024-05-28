@@ -45,6 +45,9 @@ class CajasTable extends Table
         $this->belongsTo('Puntodeventas', [
             'foreignKey' => 'puntodeventa_id'
         ]);
+        $this->belongsTo('Empresas', [
+            'foreignKey' => 'empresa_id'
+        ]);
     }
 
     /**
@@ -89,6 +92,7 @@ class CajasTable extends Table
     {
         $rules->add($rules->existsIn(['user_id'], 'Users'));
         $rules->add($rules->existsIn(['puntodeventa_id'], 'Puntodeventas'));
+        $rules->add($rules->existsIn(['empresa_id'], 'Empresas'));
 
         return $rules;
     }

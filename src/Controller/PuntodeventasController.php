@@ -20,7 +20,10 @@ class PuntodeventasController extends AppController
      */
     public function index()
     {
-       $conditions = [
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        $conditions = [
+            'Puntodeventas.empresa_id' => $empresaId
         ];
         $puntodeventas = $this->Puntodeventas->find('all',$conditions);
         $this->set(compact('puntodeventas'));
@@ -35,9 +38,16 @@ class PuntodeventasController extends AppController
      */
     public function view($id = null)
     {
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
         $puntodeventa = $this->Puntodeventas->get($id, [
-            'contain' => ['Ventas']
+            'contain' => ['Ventas'],
+            'conditions' => ['Puntodeventas.empresa_id' => $empresaId]
         ]);
+        if($puntodeventa['empresa_id'] != $empresaId ){
+            $this->Flash->error(__('El Punto de venta no existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
 
         $this->set('puntodeventa', $puntodeventa);
     }
@@ -52,6 +62,9 @@ class PuntodeventasController extends AppController
         $puntodeventa = $this->Puntodeventas->newEntity();
         if ($this->request->is('post')) {
             $puntodeventa = $this->Puntodeventas->patchEntity($puntodeventa, $this->request->getData());
+            $session = $this->request->getSession(); // less than 3.5
+            $empresaId = $session->read('Auth.User')['empresa_id'];
+            $puntodeventa->empresa_id = $empresaId;
             if ($this->Puntodeventas->save($puntodeventa)) {
                 $this->Flash->success(__('The puntodeventa has been saved.'));
 
@@ -74,6 +87,13 @@ class PuntodeventasController extends AppController
         $puntodeventa = $this->Puntodeventas->get($id, [
             'contain' => []
         ]);
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        if($puntodeventa['empresa_id'] != $empresaId ){
+            $this->Flash->error(__('El Punto de venta no existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $puntodeventa = $this->Puntodeventas->patchEntity($puntodeventa, $this->request->getData());
             if ($this->Puntodeventas->save($puntodeventa)) {
@@ -97,6 +117,12 @@ class PuntodeventasController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $puntodeventa = $this->Puntodeventas->get($id);
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        if($puntodeventa['empresa_id'] != $empresaId ){
+            $this->Flash->error(__('El Punto de venta no existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
         if ($this->Puntodeventas->delete($puntodeventa)) {
             $this->Flash->success(__('The puntodeventa has been deleted.'));
         } else {

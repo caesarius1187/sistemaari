@@ -38,6 +38,9 @@ class PuntodeventasTable extends Table
         $this->setDisplayField('nombre');
         $this->setPrimaryKey('id');
 
+        $this->belongsTo('Empresas', [
+            'foreignKey' => 'empresa_id'
+        ]);
         $this->hasMany('Ventas', [
             'foreignKey' => 'puntodeventa_id'
         ]);

@@ -121,7 +121,7 @@ $this->Html->script([
                             <?php foreach ($compras as $compra): ?>
                             <tr>
                                 <td><?= h(date('d-m-Y',strtotime($compra->fecha))) ?></td>
-                                <td><?= $compra->has('cliente') ? $this->Html->link($compra->cliente->nombre, ['controller' => 'Clientes', 'action' => 'view', $compra->cliente->id]) : '' ?></td>
+                                <td><?= $compra->has('provedore') ? $this->Html->link($compra->provedore->nombre, ['controller' => 'Provedores', 'action' => 'view', $compra->provedore->id]) : '' ?></td>
                                 <td><?php 
                                     $numeroPDV = str_pad($compra->puntodeventa->numero, 5, "0", STR_PAD_LEFT)."-".$compra->numero;
                                     echo $this->Html->link( $numeroPDV, ['controller' => 'Puntodeventas', 'action' => 'view', $compra->puntodeventa->id]);

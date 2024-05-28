@@ -33,11 +33,11 @@ class CajasController extends AppController
                 ];
             }
         }
-
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
         $cajas = $this->Cajas->find('all', [
                 'contain'=>['Puntodeventas','Users'],
-                'conditions' => [
-                ]
+                'conditions' => [ 'Cajas.empresa_id' => $empresaId]
             ]);
         $this->set(compact('cajas'));
         $session = $this->request->getSession(); // less than 3.5
@@ -57,6 +57,7 @@ class CajasController extends AppController
      */
     public function view($id = null)
     {
+        //TODO: Controlar que no vea cajas de otros usuarios
         $caja = $this->Cajas->get($id, [
             'contain' => ['Users', 'Puntodeventas']
         ]);
@@ -72,13 +73,16 @@ class CajasController extends AppController
     public function add()
     {
         $caja = $this->Cajas->newEntity();
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
 
         if ($this->request->is('post')) {
             $cajasabiertas = $this->Cajas->find('all', [
                 'contain'=>['Puntodeventas'],
                 'conditions' => [
                     'DATE(Cajas.apertura) <= NOW()',
-                    "Cajas.cierre IS NULL"
+                    "Cajas.cierre IS NULL",
+                    "Cajas.empresa_id"=>$empresaId
                 ]
             ]);
             foreach ($cajasabiertas as $kca => $cajaabierta) {
@@ -91,6 +95,7 @@ class CajasController extends AppController
             $caja = $this->Cajas->patchEntity($caja, $this->request->getData());            
             $now = Time::parse('now');
             $caja['apertura'] =  $now->i18nFormat('yyyy-MM-dd HH:mm:ss');
+            $caja['empresa_id'] =  $empresaId;
             if ($this->Cajas->save($caja)) {
                 $this->Flash->success(__('Se ha abierto la caja con exito.'));
 
@@ -103,10 +108,8 @@ class CajasController extends AppController
             'keyField' => 'id',
             'valueField' => 'first_name'
         ]);
-        $puntodeventas = $this->Cajas->Puntodeventas->find('list', ['limit' => 200]);
+        $puntodeventas = $this->Cajas->Puntodeventas->find('list', ['conditions' => ['Puntodeventas.empresa_id' => $empresaId]]);
         $this->set(compact('caja', 'users', 'puntodeventas'));
-        $session = $this->request->getSession(); // less than 3.5
-        // $session = $this->request->getSession(); // 3.5 or more
         $AuthUserId = $session->read('Auth.User')['id'];
         $AuthUserNombre = $session->read('Auth.User')['first_name']." ".$session->read('Auth.User')['last_name'];
 
@@ -122,10 +125,10 @@ class CajasController extends AppController
      */
     public function cerrar($id = null)
     {
+        //TODO: Controlar que no vea cajas de otros usuarios
         $this->loadModel('Pagos');
         $this->loadModel('Extracciones');
         $session = $this->request->getSession(); // less than 3.5
-        // $session = $this->request->getSession(); // 3.5 or more
         $AuthUserId = $session->read('Auth.User')['id'];
         $AuthUserNombre = $session->read('Auth.User')['first_name']." ".$session->read('Auth.User')['last_name'];
 
@@ -133,6 +136,11 @@ class CajasController extends AppController
         $caja = $this->Cajas->get($id, [
             'contain' => ['Users']
         ]);
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        if($caja['empresa_id'] != $empresaId ){
+            $this->Flash->error(__('La Caja no existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
         $cajaCerrada = false;
         if(!is_null($caja['cierre'])){
             $cajaCerrada = true;
@@ -192,6 +200,12 @@ class CajasController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $caja = $this->Cajas->get($id);
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        if($caja['empresa_id'] != $empresaId ){
+            $this->Flash->error(__('La Caja no existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
         if ($this->Cajas->delete($caja)) {
             $this->Flash->success(__('The caja has been deleted.'));
         } else {

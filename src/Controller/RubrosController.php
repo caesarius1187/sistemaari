@@ -22,7 +22,13 @@ class RubrosController extends AppController
      */
     public function index()
     {
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        
         $conditions = [
+            'conditions'=>[
+                'Rubros.empresa_id' => $empresaId
+            ]
         ];
         $rubros = $this->Rubros->find('all',$conditions);
         $this->set(compact('rubros'));
@@ -46,7 +52,10 @@ class RubrosController extends AppController
         }
         $fechaconsultainicio = date('Y-m-d',strtotime($fechaRubrosinicio));
         $fechaconsultafin = date('Y-m-d',strtotime($fechaRubrosfin));
-       
+        
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+
         $conditions = [
             'contain' => [
                 'Detalleventas'=>[
@@ -59,6 +68,7 @@ class RubrosController extends AppController
                 'Ventas.presupuesto' => 0,
                 'Ventas.fecha >= "'.$fechaconsultainicio.'"',
                 'Ventas.fecha <= "'.$fechaconsultafin.'"',
+                'Ventas.empresa_id' => $empresaId,
             ]
         ];
         $ventasTable = TableRegistry::get('Ventas');
@@ -72,7 +82,12 @@ class RubrosController extends AppController
         $rubro = $this->Rubros->get($id, [
             'contain' => ['Productos']
         ]);
-
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        if($rubro['empresa_id'] != $empresaId ){
+            $this->Flash->error(__('El Rubro no existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
         $this->set('rubro', $rubro);
     }
 
@@ -84,8 +99,11 @@ class RubrosController extends AppController
     public function add()
     {
         $rubro = $this->Rubros->newEntity();
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
         if ($this->request->is('post')) {
             $rubro = $this->Rubros->patchEntity($rubro, $this->request->getData());
+            $rubro->empresa_id = $empresaId;
             if ($this->Rubros->save($rubro)) {
                 $this->Flash->success(__('The rubro has been saved.'));
 
@@ -108,6 +126,12 @@ class RubrosController extends AppController
         $rubro = $this->Rubros->get($id, [
             'contain' => []
         ]);
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        if($rubro['empresa_id'] != $empresaId ){
+            $this->Flash->error(__('El Rubro no existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
         if ($this->request->is(['patch', 'post', 'put'])) {
             $rubro = $this->Rubros->patchEntity($rubro, $this->request->getData());
             if ($this->Rubros->save($rubro)) {
@@ -131,24 +155,27 @@ class RubrosController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $rubro = $this->Rubros->get($id);
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        if($rubro['empresa_id'] != $empresaId ){
+            $this->Flash->error(__('El Rubro no existe.'));
+            return $this->redirect(['action' => 'index']);
+        }
         $this->loadModel('Productos');
         $productosTable = TableRegistry::get('Productos');
-        $entity = $productosTable->newEntity($this->request->getData());
-            $respuesta = "";
-            //no guardemos un codigo de producto repetido
-            $exists = $productosTable->exists([
-                'OR'=>[
-                    'rubro_id' => $id
-                ]
-            ]);
-            if($exists){
-                $this->Flash->error(__('El rubro no se puede eliminar por que tiene productos ligados.'));
-                return $this->redirect(['action' => 'index']);
-            }
+        $exists = $productosTable->exists([
+            'OR'=>[
+                'rubro_id' => $id
+            ]
+        ]);
+        if($exists){
+            $this->Flash->error(__('El rubro no se puede eliminar por que tiene productos ligados.'));
+            return $this->redirect(['action' => 'index']);
+        }
         if ($this->Rubros->delete($rubro)) {
-            $this->Flash->success(__('The rubro has been deleted.'));
+            $this->Flash->success(__('El Rubro fue eliminado.'));
         } else {
-            $this->Flash->error(__('The rubro could not be deleted. Please, try again.'));
+            $this->Flash->error(__('El Rubro no se pudo eliminar. Por favor, intente de nuevo mas tarde.'));
         }
 
         return $this->redirect(['action' => 'index']);

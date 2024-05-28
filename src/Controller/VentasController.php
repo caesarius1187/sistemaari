@@ -48,6 +48,9 @@ class VentasController extends AppController
      */
     public function index()
     {
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+      
         $fechaVentasDesde = date('d-m-Y');
         $fechaVentasHasta = date('d-m-Y');
         if ($this->request->is('post')) {
@@ -72,6 +75,7 @@ class VentasController extends AppController
                   'Ventas.created <= "'.$fechaconsultahasta.' 23:59:59"',
                   'Ventas.created >= "'.$fechaconsultadesde.' 00:00:00"',
                   'Ventas.puntodeventa_id' => $micaja['puntodeventa_id'],
+                  'Ventas.empresa_id' => $empresaId,
               ]
           ];
         }else{
@@ -80,6 +84,7 @@ class VentasController extends AppController
               'conditions'=>[
                   'Ventas.created <= "'.$fechaconsultahasta.' 23:59:59"',
                   'Ventas.created >= "'.$fechaconsultadesde.' 00:00:00"',
+                  'Ventas.empresa_id' => $empresaId,
               ]
           ];
         }
@@ -90,19 +95,15 @@ class VentasController extends AppController
         $ventas = $this->Ventas->find('all',$conditions);
         $venta = $this->Ventas->newEntity();
 
-        $session = $this->request->getSession(); // less than 3.5
         $AuthUserRole = $session->read('Auth.User')['role'];
         $this->set(compact('fechaVentasDesde','fechaVentasHasta','venta','ventas','micaja','AuthUserRole'));
     }
     public function ventasdiarias()
     {
         $session = $this->request->getSession(); // less than 3.5
-        // $session = $this->request->getSession(); // 3.5 or more
         $AuthUserId = $session->read('Auth.User')['id'];
-        /*if($AuthUserId!='50e502c3-d8f0-40a0-a0b1-51de0f071349'){
-          $this->Flash->error(__('Error. No tiene autorizacion para entrar a esta seccion del sistema.'));
-          return $this->redirect(['action' => 'index']);
-        }*/
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        
         $fechaVentasDesde = date('d-m-Y',strtotime('-1 months'));
         $fechaVentasHasta = date('d-m-Y');
         if ($this->request->is('post')) {
@@ -124,6 +125,7 @@ class VentasController extends AppController
             'Ventas.created <= "'.$fechaconsultahasta.' 23:59:59"',
             'Ventas.created >= "'.$fechaconsultadesde.' 00:00:00"',
             'Ventas.presupuesto'=>0,
+            'Ventas.empresa_id' => $empresaId
         ])
         ->group(['DATE_FORMAT(created,"%d/%m/%Y")','comprobante_id']);
          $miventa = $this->Ventas->newEntity();
@@ -146,6 +148,8 @@ class VentasController extends AppController
                         Ventas.created >= "'.$fechaconsultadesde.' 00:00:00"
                         AND
                         Ventas.presupuesto = 0
+                        AND
+                        Ventas.empresa_id = '.$empresaId.'
                 )'
             ]
         )->group(['DATE_FORMAT(created,"%d/%m/%Y")']); 
@@ -153,6 +157,8 @@ class VentasController extends AppController
     }
     public function listado()
     {
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
         $fechaVentasDesde = date('d-m-Y');
         $fechaVentasHasta = date('d-m-Y');
         if ($this->request->is('post')) {
@@ -174,6 +180,7 @@ class VentasController extends AppController
             'conditions'=>[
                 'Ventas.created <= "'.$fechaconsultahasta.'"',
                 'Ventas.created >= "'.$fechaconsultadesde.'"',
+                'Ventas.empresa_id' => $empresaId
             ],
             'order'=>[
               'Ventas.numero*1 DESC'
@@ -195,6 +202,9 @@ class VentasController extends AppController
      */
     public function view($id = null,$original = null)
     {
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+
         $this->loadModel('Puntodeventas');
         $venta = $this->Ventas->get($id, [
             'contain' => [
@@ -206,7 +216,10 @@ class VentasController extends AppController
               'Comprobantes',
                'Users']
         ]);
-
+        if($venta['empresa_id'] != $empresaId){
+          $this->Flash->error(__('Error. Venta inexistente.'));
+          return $this->redirect(['action' => 'index']);
+        }
         $this->set('venta', $venta);$micaja = [];       
         $this->set('micaja',$micaja);
         $ventadeclarada = false;
@@ -261,27 +274,22 @@ class VentasController extends AppController
               'Comprobantes',
                'Users']
         ]);
-
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        if($venta['empresa_id'] != $empresaId){
+          $this->Flash->error(__('Error. Venta inexistente.'));
+          return $this->redirect(['action' => 'index']);
+        }
         $this->set('venta', $venta);$micaja = [];       
         $this->set('micaja',$micaja);
         $ventadeclarada = false;
         $afip = $this->Ventas->afipConect($this->AFIPIsProduction); 
         if($venta['comprobantedesde']){
-          //App::import('Vendor', 'Afip/Afip');
-          /*require_once(ROOT. DS  . 'vendor' . DS  . 'Afip' . DS . 'Afip.php');
-          $afip = new Afip([
-              'CUIT' => 20330462478,
-              'cert' => 'certHomo.crt',
-              'key' => 'private',
-              'passphrase'=>'private',
-              'production'=>false
-          ]);            */
-          
-          //debug($venta);die();
           $numero = $venta->comprobantedesde;
           $PtoVta = $venta->puntodeventa->id;
           $puntodeventa = $this->Puntodeventas->get($PtoVta, [
             'conditions' => [
+              'Puntodeventas.empresa_id' => $empresaId
             ]
           ]);
           $CbteTipo = $venta->comprobante_id;//el comprobante_id es el IDAFIP no de la base de datos                   
@@ -315,6 +323,8 @@ class VentasController extends AppController
      }*/
     public function addventa()
     {
+      $session = $this->request->getSession(); // less than 3.5
+      $empresaId = $session->read('Auth.User')['empresa_id'];
       $this->loadModel('Productos');
       $this->loadModel('Pagos');
       $micaja = [];
@@ -350,10 +360,13 @@ class VentasController extends AppController
                $topventa = $this->Ventas->find('all',[
                  'fields' => ['ultimaventa' => 'MAX(Ventas.numero*1)'],
                  'conditions'=>[
-                      'Ventas.puntodeventa_id'=> $micaja['puntodeventa']['id']
+                      'Ventas.puntodeventa_id'=> $micaja['puntodeventa']['id'],
+                      'Ventas.empresa_id'=>$empresaId
                  ]
               ]); 
               $ultimaventa = iterator_to_array($topventa);
+              $entity->empresa_id = $empresaId;
+
               if ($ventasTable->save($entity)) {
                   // The $article entity contains the id now
                   $id = $entity->id;
@@ -389,6 +402,7 @@ class VentasController extends AppController
                     // New entity with nested associations
                     $entityP = $pagosTable->newEntity($this->request->getData()['pagos'], []);
                     $entityP->venta_id = $id;
+                    $entityP->empresa_id = $empresaId;
                     if ($pagosTable->save($entityP)) {
                       $respuesta .=  "El Cobro ha sido Guardado. ".$entityP->venta_id ;
                     }
@@ -416,30 +430,30 @@ class VentasController extends AppController
               return $this->response;        
 
       }
-      $clientes = $this->Ventas->Clientes->find('list');
-      $puntodeventas = $this->Ventas->Puntodeventas->find('list', ['limit' => 200]);
-      $rubros = $this->Productos->Rubros->find('list');
-      $users = $this->Ventas->Users->find('list', ['limit' => 200]);
+      $clientes = $this->Ventas->Clientes->find('list',['conditions'=>['Clientes.empresa_id'=>$empresaId]]);
+      $puntodeventas = $this->Ventas->Puntodeventas->find('list',['conditions'=>['Puntodeventas.empresa_id'=>$empresaId]]);
+      $rubros = $this->Productos->Rubros->find('list',['conditions'=>['Rubros.empresa_id'=>$empresaId]]);
+      $users = $this->Ventas->Users->find('list', ['conditions'=>['Users.empresa_id'=>$empresaId]]);
       
       $this->set(compact('venta','cliente','producto','rubros', 'clientes', 'puntodeventas', 'users'));
 
       $topventa = $this->Ventas->find('all',[
          'fields' => ['ultimaventa' => 'MAX(Ventas.numero*1)'],
          'conditions'=>[
-              'Ventas.puntodeventa_id'=> $micaja['puntodeventa']['numero']
+              'Ventas.puntodeventa_id'=> $micaja['puntodeventa']['numero'],
+              'Ventas.empresa_id'=>$empresaId
          ]
       ]); 
       $ultimaventa = iterator_to_array($topventa);
       $toppago = $this->Pagos->find('all',[
          'fields' => ['ultimopago' => 'MAX(Pagos.numero)'],
          'conditions'=>[
-              'Pagos.puntodeventa_id'=> $micaja['puntodeventa']['numero']
+              'Pagos.puntodeventa_id'=> $micaja['puntodeventa']['numero'],
+              'Pagos.empresa_id'=> $empresaId
          ]
       ]); 
       $ultimopago = iterator_to_array($toppago);
 
-      $session = $this->request->getSession(); // less than 3.5
-      // $session = $this->request->getSession(); // 3.5 or more
       $AuthUserId = $session->read('Auth.User')['id'];
       $AuthUserNombre = $session->read('Auth.User')['first_name']." ".$session->read('Auth.User')['last_name'];
 
@@ -449,7 +463,8 @@ class VentasController extends AppController
       $detalleventa = $this->Detalleventas->newEntity();
       $productos = $this->Detalleventas->Productos->find('list',[
         'keyField' => 'id',
-        'valueField' => 'full_name'
+        'valueField' => 'full_name',
+        'conditions'=>['Productos.empresa_id'=>$empresaId]
       ]);
       $comprobantes = $this->Ventas->Comprobantes->find('list');
       $this->set(compact('detalleventa','comprobantes','productos'));
@@ -457,7 +472,8 @@ class VentasController extends AppController
       $topproducto = $this->Detalleventas->Productos->find('all',[
          'fields' => ['ultimoproducto' => 'MAX(Productos.codigo*1)'],
          'conditions'=>[
-              'Productos.codigo*1 < 10000'
+              'Productos.codigo*1 < 10000',
+              'Productos.empresa_id'=>$empresaId
          ]
       ]); 
       $topproducto = iterator_to_array($topproducto);
@@ -472,9 +488,16 @@ class VentasController extends AppController
      */
     public function edit($id = null)
     {
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
+        
         $venta = $this->Ventas->get($id, [
             'contain' => []
         ]);
+        if($venta['empresa_id'] != $empresaId){
+          $this->Flash->error(__('Error. Venta inexistente.'));
+          return $this->redirect(['action' => 'index']);
+        }
         if ($this->request->is(['patch', 'post', 'put'])) {
             $venta = $this->Ventas->patchEntity($venta, $this->request->getData());
             if ($this->Ventas->save($venta)) {
@@ -498,8 +521,14 @@ class VentasController extends AppController
      */
     public function delete($id = null)
     {
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
         $this->request->allowMethod(['post', 'delete']);
         $venta = $this->Ventas->get($id);
+        if($venta['empresa_id'] != $empresaId){
+          $this->Flash->error(__('Error. Venta inexistente.'));
+          return $this->redirect(['action' => 'index']);
+        }
         if ($this->Ventas->delete($venta)) {
             //vamos a buscar todos los detalles que tengan este id
              $conditionsDv = [
@@ -557,16 +586,9 @@ class VentasController extends AppController
     
     public function getlastvoucher($PtoVta,$CbteTipo){
         $this->loadModel('Puntodeventas');
-        //App::import('Vendor', 'Afip/Afip');
-        /*require_once(ROOT. DS  . 'vendor' . DS  . 'Afip' . DS . 'Afip.php');
-        $afip = new Afip([
-            'CUIT' => 20330462478,
-            'cert' => 'certHomo.crt',
-            'key' => 'private',
-            'passphrase'=>'private',
-            'production'=>false
-        ]);    */
         $afip = $this->Ventas->afipConect($this->AFIPIsProduction);
+        $session = $this->request->getSession(); // less than 3.5
+        $empresaId = $session->read('Auth.User')['empresa_id'];
         $puntodeventa = $this->Puntodeventas->get($PtoVta, [
             'conditions' => [
             ]
@@ -607,6 +629,12 @@ class VentasController extends AppController
         //redireccionaremos al view
          $ventasTable= TableRegistry::get('Ventas');
          $venta = $ventasTable->get($id);
+         $session = $this->request->getSession(); // less than 3.5
+         $empresaId = $session->read('Auth.User')['empresa_id'];
+         if($venta['empresa_id'] != $empresaId){
+          $this->Flash->error(__('Error. Venta inexistente.'));
+          return $this->redirect(['action' => 'index']);
+        }
          if(!is_null($venta->comprobantedesde)){
             $this->Flash->error(__('Error. Esta venta ya esta declarada.'));
             return $this->redirect(['action' => 'view',$id]);
@@ -877,7 +905,8 @@ class VentasController extends AppController
         $conditionspuntosdeventa = [];//array('Puntosdeventa.cliente_id' => $cliente_id,);
         $puntodeventas = $this->Puntodeventas->find('list',[
           'conditions' => [
-                'facturacionhabilitada'=>1
+                'facturacionhabilitada'=>1,
+                'empresa_id'=>$empresaId
             ]
         ]);
 
@@ -942,179 +971,5 @@ class VentasController extends AppController
 
     public function afipgetvoucherinfo($ventaid){
       
-    }
-    public function afipsdktest(){
-        require('../vendor/Afipsdk/src/Afip.php');
-        $this->autoRender = false;
-        $this->loadModel('Configuracionafips');
-        $configAFIP = $this->Configuracionafips->get(2);
-
-        //debug($ultimoComprobante);
-        //// CUIT al cual le queremos generar el certificado
-        //$tax_id = 201111111111; 
-
-        // Usuario para ingresar a AFIP.
-        // Para la mayoria es el mismo CUIT, pero al administrar
-        // una sociedad el CUIT con el que se ingresa es el del administrador
-        // de la sociedad.
-        $username = $configAFIP['cuitemisor']; 
-        $tax_id = $username;
-
-        // Contraseña para ingresar a AFIP.
-        $password = $configAFIP['password']; 
-
-        // Alias para el certificado (Nombre para reconocerlo en AFIP)
-        // un alias puede tener muchos certificados, si estas renovando
-        // un certificado podes utilizar el mismo alias
-        $alias = 'afipsdk';
-        
-        $cert = $configAFIP['cert']; 
-        $key = $configAFIP['key']; 
-        
-        // Creamos una instancia de la libreria
-        $afip = new Afip(array('CUIT' => $tax_id ));
-
-        $this->viewBuilder()->setClassName('Json');
-
-        $afip = new Afip(array(
-            'CUIT' => $tax_id,
-            'cert' => $cert,
-            'key' => $key
-        ));
-        // Id del web service a autorizar
-        $wsid = 'wsfe';
-
-        // Creamos una instancia de la libreria
-        //$afip = new Afip(array('CUIT' => $tax_id ));
-
-        // Creamos la autorizacion (¡Paciencia! Esto toma unos cuantos segundos)
-        $res = $afip->CreateWSAuth($username, $password, $alias, $wsid);
-
-        // Mostramos el resultado por pantalla
-        //ImpTotal = ImpTotConc + ImpNeto + ImpOpEx + ImpTrib + ImpIVA
-        $data = array(
-          'CantReg'     => 1, // Cantidad de comprobantes a registrar
-          'PtoVta'    => 1, // Punto de venta
-          'CbteTipo'    => 6, // Tipo de comprobante (ver tipos disponibles) 
-          'Concepto'    => 1, // Concepto del Comprobante: (1)Productos, (2)Servicios, (3)Productos y Servicios
-          'DocTipo'     => 80, // Tipo de documento del comprador (ver tipos disponibles)
-          'DocNro'    => 20111111112, // Numero de documento del comprador
-          'CbteDesde'   => 8, // Numero de comprobante o numero del primer comprobante en caso de ser mas de uno
-          'CbteHasta'   => 8, // Numero de comprobante o numero del ultimo comprobante en caso de ser mas de uno
-          'CbteFch'     => intval(date('Ymd')), // (Opcional) Fecha del comprobante (yyyymmdd) o fecha actual si es nulo
-          'ImpTotal'    => 181.5, // Importe total del comprobante
-          'ImpTotConc'  => 0, // Importe neto no gravado
-          'ImpNeto'     => 150, // Importe neto gravado
-          'ImpOpEx'     => 0, // Importe exento de IVA
-          'ImpIVA'    => 31.5, //Importe total de IVA
-          'ImpTrib'     => 0, //Importe total de tributos
-          'FchServDesde'  => NULL, // (Opcional) Fecha de inicio del servicio (yyyymmdd), obligatorio para Concepto 2 y 3
-          'FchServHasta'  => NULL, // (Opcional) Fecha de fin del servicio (yyyymmdd), obligatorio para Concepto 2 y 3
-          'FchVtoPago'  => NULL, // (Opcional) Fecha de vencimiento del servicio (yyyymmdd), obligatorio para Concepto 2 y 3
-          'MonId'     => 'PES', //Tipo de moneda usada en el comprobante (ver tipos disponibles)('PES' para pesos argentinos) 
-          'MonCotiz'    => 1, // Cotización de la moneda usada (1 para pesos argentinos)  
-          //'CbtesAsoc'   => array( // (Opcional) Comprobantes asociados
-          //  array(
-          //    'Tipo'    => 6, // Tipo de comprobante (ver tipos disponibles) 
-          //    'PtoVta'  => 1, // Punto de venta
-          //    'Nro'     => 1, // Numero de comprobante
-          //    'Cuit'    => 20111111112 // (Opcional) Cuit del emisor del comprobante
-          //    )
-          //  ),
-          //'Tributos'    => array( // (Opcional) Tributos asociados al comprobante
-          //  array(
-          //    'Id'    =>  99, // Id del tipo de tributo (ver tipos disponibles) 
-          //    'Desc'    => 'Ingresos Brutos', // (Opcional) Descripcion
-          //    'BaseImp'   => 100, // Base imponible para el tributo
-          //    'Alic'    => 5.2, // Alícuota
-          //    'Importe'   => 7.8 // Importe del tributo
-          //  )
-          //), 
-          'Iva'       => array( // (Opcional) Alícuotas asociadas al comprobante
-            array(
-              'Id'    => 5, // Id del tipo de IVA (ver tipos disponibles) 
-              'BaseImp'   => 150, // Base imponible
-              'Importe'   => 31.5 // Importe 
-            )
-          ), 
-          //'Opcionales'  => array( // (Opcional) Campos auxiliares
-          //  array(
-          //    'Id'    => 17, // Codigo de tipo de opcion (ver tipos disponibles) 
-          //    'Valor'   => 2 // Valor 
-          //  )
-          //), 
-          //'Compradores'   => array( // (Opcional) Detalles de los clientes del comprobante 
-          //  array(
-          //    'DocTipo'     => 80, // Tipo de documento (ver tipos disponibles) 
-          //    'DocNro'    => 20111111112, // Numero de documento
-          //    'Porcentaje'  => 100 // Porcentaje de titularidad del comprador
-          //  )
-          //)
-        );
-        $punto_de_venta = 1;
-        $tipo_de_comprobante = 6;
-        $ultimoComprobante = $afip->ElectronicBilling->GetLastVoucher($punto_de_venta, $tipo_de_comprobante);
-        $data['CbteDesde'] = $ultimoComprobante*1+1;
-        $data['CbteHasta'] = $ultimoComprobante*1+1;
-        $voucher = $afip->ElectronicBilling->CreateVoucher($data);
-        $data=['ultimoComprobante' => $ultimoComprobante,
-                'voucher'=>$voucher
-              ];
-        echo json_encode($data);
-        $response = $this->response;
-        $response = $response->withType('application/json')
-            ->withStringBody(json_encode($data));
-        return $this->response;        
-    }
-    public function generarCertificado($username, $password){
-        require('../vendor/Afipsdk/src/Afip.php');
-        $this->autoRender = false;
-        $this->loadModel('Configuracionafips');
-        
-        $configAFIP = $this->Configuracionafips->newEntity();
-        // Usuario para ingresar a AFIP.
-        // Para la mayoria es el mismo CUIT, pero al administrar
-        // una sociedad el CUIT con el que se ingresa es el del administrador
-        // de la sociedad.
-        $username = $username; 
-        $tax_id = $username;
-
-        // Contraseña para ingresar a AFIP.
-        $password = $password;
-
-        // Alias para el certificado (Nombre para reconocerlo en AFIP)
-        // un alias puede tener muchos certificados, si estas renovando
-        // un certificado podes utilizar el mismo alias
-        $alias = 'afipsdk';
-
-        // Creamos una instancia de la libreria
-        $afip = new Afip(array('CUIT' => $tax_id ));
-
-        // Creamos el certificado (¡Paciencia! Esto toma unos cuantos segundos)
-        $res = $afip->CreateCert($username, $password, $alias);
-        // Mostramos el certificado por pantalla
-        //debug($res->cert);
-
-        // Mostramos la key por pantalla
-        //debug($res->key);
-
-
-        $configAFIP->cuitemisor = $username;
-        $configAFIP->password = $password;
-        $configAFIP->alias = $alias;
-        $configAFIP->cert = $res->cert;
-        $configAFIP->key = $res->key;
-        $this->Configuracionafips->save($configAFIP);
-
-        $this->viewBuilder()->setClassName('Json');
-        $data=['key' => $key,
-                'cert'=>$cert
-              ];
-
-        echo json_encode($data);
-        $response = $this->response;
-        $response = $response->withType('application/json')
-            ->withStringBody(json_encode($data));
-        return $this->response;        
     }
 }

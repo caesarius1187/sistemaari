@@ -115,7 +115,7 @@ $cakeDescription = 'King Pack descartables';
             a.parent().addClass('active').parents('.treeview').addClass('active');
         }
     });
-    var serverLayoutURL = "/kingpack";
+    var serverLayoutURL = "/sistemaari";
     $(document).ajaxStart(function() { Pace.restart(); });
 </script>
 </body>

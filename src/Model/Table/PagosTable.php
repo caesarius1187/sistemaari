@@ -44,6 +44,9 @@ class PagosTable extends Table
         $this->belongsTo('Clientes', [
             'foreignKey' => 'cliente_id'
         ]);
+        $this->belongsTo('Provedores', [
+            'foreignKey' => 'provedore_id'
+        ]);
         $this->belongsTo('Puntodeventas', [
             'foreignKey' => 'puntodeventa_id'
         ]);
@@ -55,6 +58,9 @@ class PagosTable extends Table
         ]);
         $this->belongsTo('Compras', [
             'foreignKey' => 'compra_id'
+        ]);
+        $this->belongsTo('Empresas', [
+            'foreignKey' => 'empresa_id'
         ]);
     }
 
@@ -79,8 +85,6 @@ class PagosTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['cliente_id'], 'Clientes'));
-
         return $rules;
     }
     public function beforeSave($event, $entity, $options) {
