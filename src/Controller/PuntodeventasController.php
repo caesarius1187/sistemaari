@@ -23,7 +23,7 @@ class PuntodeventasController extends AppController
         $session = $this->request->getSession(); // less than 3.5
         $empresaId = $session->read('Auth.User')['empresa_id'];
         $conditions = [
-            'Puntodeventas.empresa_id' => $empresaId
+            'conditions'=>['Puntodeventas.empresa_id' => $empresaId]
         ];
         $puntodeventas = $this->Puntodeventas->find('all',$conditions);
         $this->set(compact('puntodeventas'));

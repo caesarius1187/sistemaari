@@ -301,7 +301,6 @@ class ProductosController extends AppController
         $session = $this->request->getSession(); // less than 3.5
         $empresaId = $session->read('Auth.User')['empresa_id'];
         if ($this->request->is(['patch', 'post', 'put'])) {
-            debug($this->request->getData());
             $rubro = $this->request->getData()['rubro_id'];
             $incremento = $this->request->getData()['incremento'];
             if($this->Productos->actualizarPrecioPorRubro($rubro,$incremento,$empresaId)){
